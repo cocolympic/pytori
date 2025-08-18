@@ -183,9 +183,9 @@ jobs:
 
   fail-on-error:
     name: "Fail on ❌ in latest comment"
-    needs: review-via-claude
+    needs: [review-via-claude, check-commit-author]
     runs-on: ubuntu-latest
-    if: ${{ needs.check-commit-author.outputs.result != 'fail' }}
+    if: ${{ always() && (github.event.pull_request.number == 1 || needs.check-commit-author.outputs.result != 'fail') }}
     steps:
       - uses: actions/checkout@v4
       - name: Check for ❌ in latest PR comment
